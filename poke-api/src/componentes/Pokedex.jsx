@@ -9,45 +9,51 @@ export default function Pokedex() {
 
   useEffect(() => {
     fetch("https://pokeapi.co/api/v2/pokemon?limit=151")
-      .then(res => res.json())
-      .then(data => setPokemons(data.results));
+      .then((res) => res.json())
+      .then((data) => setPokemons(data.results));
   }, []);
 
-  const filtered = pokemons.filter(p =>
+  const filtered = pokemons.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-  <div className="">
-    <Buscador value={search} onChange={setSearch} />
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4">
-      {filtered.length === 0 && (
-        <div className="col-span-4 text-center text-white">
-          No se encontró ningún Pokémon.
-        </div>
-      )}
-      {filtered.map((pokemon, idx) => (
-        <div
-          key={pokemon.name}
-          className="bg-white rounded shadow p-4 flex flex-col items-center cursor-pointer hover:bg-gray-200 transition"
-          onClick={() => setSelected(pokemon.name)}
-        >
-          <img
-            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemons.indexOf(pokemon) + 1}.png`}
-            alt={pokemon.name}
-            className="w-20 h-20"
-          />
-          <span className="capitalize font-bold">{pokemon.name}</span>
-        </div>
-      ))}
-    </div>
-    {/* Mueve el modal aquí, fuera del grid */}
-    {selected && (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[99999]">
-        {console.log("Renderizando modal con:", selected)}
-        <PokemonDetalle name={selected} onClose={() => setSelected(null)} />
+    <div>
+      <div className="flex justify-center mb-4">
+        <Buscador value={search} onChange={setSearch} />
       </div>
-    )}
-  </div>
-);
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4">
+        {filtered.length === 0 && (
+          <div className="col-span-4 text-center text-white">
+            No se encontró ningún Pokémon.
+          </div>
+        )}
+        {filtered.map((pokemon) => (
+          <div
+            key={pokemon.name}
+            className="bg-white rounded shadow p-4 flex flex-col items-center cursor-pointer hover:bg-gray-200 transition"
+            onClick={() => {
+              console.log("Click en:", pokemon.name);
+              setSelected(pokemon.name);
+            }}
+          >
+            <img
+              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+                pokemons.findIndex((p) => p.name === pokemon.name) + 1
+              }.png`}
+              alt={pokemon.name}
+              className="w-20 h-20"
+            />
+            <span className="capitalize font-bold">{pokemon.name}</span>
+          </div>
+        ))}
+      </div>
+      {selected && (
+        <>
+          {console.log("Renderizando modal con:", selected)}
+          <PokemonDetalle name={selected} onClose={() => setSelected(null)} />
+        </>
+      )}
+    </div>
+  );
 }

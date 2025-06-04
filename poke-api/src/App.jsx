@@ -1,12 +1,10 @@
-import Pokedex from './componentes/Pokedex';
+import Pokedex from "./componentes/Pokedex";
 
-function App() {
+export default function App() {
   return (
-    <div className="min-h-screen min-w-full bg-[#242424] relative">
-      <h1 className="text-3xl font-bold text-center my-4">Pokédex</h1>
+    <div className="min-h-screen bg-gray-900">
+      <h1 className="text-5xl font-bold text-center text-white mt-6 mb-4">Pokédex</h1>
       <Pokedex />
     </div>
-  )
+  );
 }
-
-export default App
