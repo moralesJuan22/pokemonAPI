@@ -1,6 +1,6 @@
 export default function Buscador({ value, onChange }) {
   return (
-    <div className="flex justify-center mb-6">
+    <div className="flex justify-center mb-7">
       <input
         type="text"
         placeholder="Buscar Pokémon..."

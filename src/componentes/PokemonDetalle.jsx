@@ -18,7 +18,7 @@ export default function PokemonDetalle({ name, onClose }) {
   if (loading) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
-        <div className="bg-white p-8 rounded shadow text-black">Cargando...</div>
+        <div className="bg-white p-8 rounded shadow text-black">Cargando......</div>
       </div>
     );
   }
