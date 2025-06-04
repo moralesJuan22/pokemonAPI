@@ -1,20 +1,39 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
+import PokemonDetalle from "./PokemonDetalle";
+import Buscador from "./Buscador";
 
 export default function Pokedex() {
-  const [pokemons, setPokemons] = useState([])
+  const [pokemons, setPokemons] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=20")
+    fetch("https://pokeapi.co/api/v2/pokemon?limit=151")
       .then(res => res.json())
-      .then(data => setPokemons(data.results))
-  }, [])
+      .then(data => setPokemons(data.results));
+  }, []);
+
+  const filtered = pokemons.filter(p =>
+    p.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
+  <div className="">
+    <Buscador value={search} onChange={setSearch} />
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4">
-      {pokemons.map((pokemon, idx) => (
-        <div key={pokemon.name} className="bg-white rounded shadow p-4 flex flex-col items-center">
+      {filtered.length === 0 && (
+        <div className="col-span-4 text-center text-white">
+          No se encontró ningún Pokémon.
+        </div>
+      )}
+      {filtered.map((pokemon, idx) => (
+        <div
+          key={pokemon.name}
+          className="bg-white rounded shadow p-4 flex flex-col items-center cursor-pointer hover:bg-gray-200 transition"
+          onClick={() => setSelected(pokemon.name)}
+        >
           <img
-            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${idx + 1}.png`}
+            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemons.indexOf(pokemon) + 1}.png`}
             alt={pokemon.name}
             className="w-20 h-20"
           />
@@ -22,5 +41,13 @@ export default function Pokedex() {
         </div>
       ))}
     </div>
-  )
+    {/* Mueve el modal aquí, fuera del grid */}
+    {selected && (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[99999]">
+        {console.log("Renderizando modal con:", selected)}
+        <PokemonDetalle name={selected} onClose={() => setSelected(null)} />
+      </div>
+    )}
+  </div>
+);
 }
